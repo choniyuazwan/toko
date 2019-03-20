@@ -10,7 +10,7 @@ public class BukuDaoImpl implements BukuDao{
 	public BukuDaoImpl() {
 		dbUtil = new DBUtil(DBConnection.getConnection());
 	}
-	 
+
 	@Override
 	public List<Buku> getAllBuku() {
 		try {
@@ -20,10 +20,10 @@ public class BukuDaoImpl implements BukuDao{
         }
     	return listBuku;
 	}
-
+ 
 	@Override
-	public void addBuku() {
-		dbUtil.addBuku();	
+	public void addBuku(Buku buku) {
+		dbUtil.addBuku(buku);	
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class BukuDaoImpl implements BukuDao{
 	}
 
 	@Override
-	public void updateStok(int id, int jumlah) {
-		dbUtil.updateStok(id, jumlah);
+	public void buyBuku(int id, int jumlah) {
+		dbUtil.buyBuku(id, jumlah);
 	}
 }

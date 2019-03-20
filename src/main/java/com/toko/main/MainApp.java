@@ -7,36 +7,106 @@ import java.util.List;
 public class MainApp {
     static InputStreamReader inputStreamReader = new InputStreamReader(System.in);
     static BufferedReader input = new BufferedReader(inputStreamReader);
+
+    static BukuDao bukuDao = new BukuDaoImpl();
+	static Buku buku = new Buku();
     
-	public static void main(String[] args) throws Exception {
-		BukuDao bukuDao = new BukuDaoImpl();
-		Buku buku = new Buku();
-		
-		// add buku
-		bukuDao.addBuku();
-		
-		System.out.println("\nSemua Buku");
-		printAllBuku(bukuDao.getAllBuku());
-		
-		System.out.println("\nDetail Buku");
-		System.out.println("Id: ");
-		buku = bukuDao.getDetailBuku(Integer.parseInt(input.readLine()));
-		printDetailBuku(buku);
-
-		// update stok
-		bukuDao.updateStok(2, 4);
-
-		System.out.println("\nSemua Buku");
-		printAllBuku(bukuDao.getAllBuku());
+	public static void main(String[] args) {
+		menu();
 	}
 	
-	private static void printAllBuku(List<Buku> listBuku) {
-		for (Buku buku : listBuku) {
-			System.out.println(buku.getId() +  " - " + buku.getJudul() + " : " + buku.getStok());
+	static void menu() {
+		System.out.println("\n========= MENU UTAMA =========");
+	    System.out.println("1. Lihat Semua Data Buku");
+	    System.out.println("2. Lihat Detail Buku");
+	    System.out.println("3. Tambah Data Buku");
+	    System.out.println("4. Beli Buku");
+	    System.out.println("0. Keluar");
+	    System.out.println("");
+	    System.out.print("Pilih menu: ");
+	
+	    try {
+	        String pilihan = input.readLine().trim();
+	
+	        if (pilihan.equals("0")) {
+	        	System.exit(0);
+	        } else if (pilihan.equals("1")) {
+                getAllBuku();
+                menu();
+	        } else if (pilihan.equals("2")) {
+                getDetailBuku();
+                menu();
+	        } else if (pilihan.equals("3")) {
+                addBuku();
+                menu();
+	        } else if (pilihan.equals("4")) {
+                buyBuku();
+                menu();
+	        } else {
+	        	System.out.println("pilihan salah");
+	        	menu();
+	        }
+	    } catch (Exception e) {
+	    	e.printStackTrace();
+		}
+	}
+
+	static void getAllBuku() {
+		System.out.println("\nSemua Buku");
+		printAllBuku(bukuDao.getAllBuku());		
+	}
+	
+	static void getDetailBuku( ) {
+		try {
+			System.out.println("\nDetail Buku");
+			System.out.print("Id: ");
+			buku = bukuDao.getDetailBuku(Integer.parseInt(input.readLine()));
+			printDetailBuku(buku);			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+    
+	static void addBuku() {
+		try {
+			System.out.println("Masukkan Data Buku");
+			System.out.print("Judul: ");
+			buku.setJudul(input.readLine().trim());
+			System.out.print("Penulis: ");
+			buku.setPenulis(input.readLine().trim());
+			System.out.print("Penerbit: ");
+	    	buku.setPenerbit(input.readLine().trim());
+			System.out.print("Harga: ");
+	    	buku.setHarga(Integer.parseInt(input.readLine()));
+			System.out.print("Stok: ");
+	    	buku.setStok(Integer.parseInt(input.readLine()));
+	    	bukuDao.addBuku(buku);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	static void buyBuku() {
+		try {
+			System.out.println("\nBeli Barang");
+			System.out.print("Id: ");
+			int id = Integer.parseInt(input.readLine());
+			System.out.print("Jumlah: ");
+			int jumlah = Integer.parseInt(input.readLine());
+			bukuDao.buyBuku(id, jumlah);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
-	private static void printDetailBuku(Buku buku) {
-		System.out.println(buku.getId() +  " - " + buku.getJudul() + " : " + buku.getStok());
+	static void printAllBuku(List<Buku> listBuku) {
+		for (Buku buku : listBuku) {
+			System.out.println(buku.getId() +  " | " + buku.getJudul() + " | " + buku.getPenulis() + " | " + buku.getPenerbit() + " | " + buku.getHarga() + " | " + buku.getStok());
+		}
+	}
+	
+	static void printDetailBuku(Buku buku) {
+		System.out.println(buku.getId() +  " | " + buku.getJudul() + " | " + buku.getPenulis() + " | " + buku.getPenerbit() + " | " + buku.getHarga() + " | " + buku.getStok());
 	}
 }
