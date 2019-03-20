@@ -27,7 +27,7 @@ public class BukuDaoImpl implements BukuDao{
 	}
 
 	@Override
-	public Buku getDetail(int id) {
+	public Buku getDetailBuku(int id) {
 		return dbUtil.getDetail(id);
 	}
 

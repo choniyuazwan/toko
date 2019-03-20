@@ -1,5 +1,8 @@
 package com.toko.main;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -12,6 +15,8 @@ public class DBUtil {
     static ResultSet resultSet;
     Buku buku = new Buku();
 	Transaksi transaksi = new Transaksi();
+    static InputStreamReader inputStreamReader = new InputStreamReader(System.in);
+    static BufferedReader input = new BufferedReader(inputStreamReader);
     
     public DBUtil(Connection connect) {
     	connection = connect;
@@ -38,16 +43,22 @@ public class DBUtil {
         }
     	return listBuku;
     }
-    
+     
     public void addBuku() {
     	Buku buku = new Buku();
-    	buku.setJudul("b");
-    	buku.setPenulis("b");
-    	buku.setPenerbit("b");
-    	buku.setHarga(100000);
-    	buku.setStok(10);
-    	
     	try {
+    		System.out.println("Masukkan Data Buku");
+    		System.out.print("Judul: ");
+			buku.setJudul(input.readLine().trim());
+    		System.out.print("Penulis: ");
+			buku.setPenulis(input.readLine().trim());
+    		System.out.print("Penerbit: ");
+	    	buku.setPenerbit(input.readLine().trim());
+    		System.out.print("Harga: ");
+	    	buku.setHarga(Integer.parseInt(input.readLine()));
+    		System.out.print("Stok: ");
+	    	buku.setStok(Integer.parseInt(input.readLine()));
+	    	
         	statement = connection.createStatement();
         	String sql = "INSERT INTO buku (judul, penulis, penerbit, harga, stok) VALUE('%s', '%s', '%s', '%d', '%d')";
     		sql = String.format(sql, buku.getJudul(), buku.getPenulis(), buku.getPenerbit(), buku.getHarga(), buku.getStok());
@@ -73,7 +84,6 @@ public class DBUtil {
     }
     
     public void updateStok(int id, int jumlah) {
-    	// update stok
 		buku = getDetail(id);
 		transaksi.setBuku(buku);
 		transaksi.setJumlah(jumlah);

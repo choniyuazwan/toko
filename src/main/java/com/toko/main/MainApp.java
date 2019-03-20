@@ -1,19 +1,15 @@
 package com.toko.main;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.List;
 
 public class MainApp {
-	static Connection connection;
-    static Statement statement;
-    static ResultSet resultSet;
-
-	public static void main(String[] args) {
+    static InputStreamReader inputStreamReader = new InputStreamReader(System.in);
+    static BufferedReader input = new BufferedReader(inputStreamReader);
+    
+	public static void main(String[] args) throws Exception {
 		BukuDao bukuDao = new BukuDaoImpl();
-		List<Transaksi> listTransaksi = new ArrayList<Transaksi>();
 		Buku buku = new Buku();
 		
 		// add buku
@@ -23,7 +19,8 @@ public class MainApp {
 		printAllBuku(bukuDao.getAllBuku());
 		
 		System.out.println("\nDetail Buku");
-		buku = bukuDao.getDetail(2);
+		System.out.println("Id: ");
+		buku = bukuDao.getDetailBuku(Integer.parseInt(input.readLine()));
 		printDetailBuku(buku);
 
 		// update stok

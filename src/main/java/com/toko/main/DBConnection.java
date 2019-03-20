@@ -8,7 +8,7 @@ public class DBConnection {
     static final String DB_URL = "jdbc:mysql://localhost:3306/toko";
     static final String USER = "root";
     static final String PASS = "aaaa";
-    
+     
     static Connection conn;
     
     public static Connection getConnection() {
