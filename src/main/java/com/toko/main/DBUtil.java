@@ -10,13 +10,15 @@ public class DBUtil {
 	static Connection connection;
     static Statement statement;
     static ResultSet resultSet;
-    List<Buku> listBuku = new ArrayList<Buku>();
+    Buku buku = new Buku();
+	Transaksi transaksi = new Transaksi();
     
     public DBUtil(Connection connect) {
     	connection = connect;
     }
     
     public List<Buku> getAllBuku() throws Exception {
+        List<Buku> listBuku = new ArrayList<Buku>();
     	try {
         	statement = connection.createStatement();
         	String sql = "SELECT * FROM buku";
@@ -57,30 +59,57 @@ public class DBUtil {
     
     public Buku getDetail(int id) {
     	Buku hasil = null;
-		for(Buku buku : listBuku) {
-			if(buku.getId() == id) {
-				hasil = buku;
+		try {
+	    	List<Buku> listBuku = getAllBuku();
+			for(Buku buku : listBuku) {
+				if(buku.getId() == id) {
+					hasil = buku;
+				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return hasil;
     }
     
     public void updateStok(int id, int jumlah) {
-    	for (Buku buku : listBuku) {
-    		if (buku.getId() == id){
-    			int stokLama = buku.getStok();
-    			int stokBaru = stokLama - jumlah;
-    			buku.setStok(stokBaru);
-    			
-    			try {
-    	        	statement = connection.createStatement();
-    	        	String sql = "update buku set stok=%d where id=%d";
-    	    		sql = String.format(sql, buku.getStok(), id);
-    	        	statement.execute(sql);
-    	        } catch (Exception e) {
-    	            e.printStackTrace();
-    	        }
-    		}
-    	}	
+    	// update stok
+		buku = getDetail(id);
+		transaksi.setBuku(buku);
+		transaksi.setJumlah(jumlah);
+
+		int totalHarga = buku.getHarga()*transaksi.getJumlah();
+		transaksi.setHarga(totalHarga);
+		
+		try {
+        	statement = connection.createStatement();
+        	String sql = "INSERT INTO transaksi (idBuku, judul, jumlah, harga) VALUE('%d', '%s', '%d', '%d')";
+    		sql = String.format(sql, transaksi.getBuku().getId(), transaksi.getBuku().getJudul(), transaksi.getJumlah(), transaksi.getHarga());
+        	statement.execute(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+		try {
+			List<Buku> listBuku = getAllBuku();
+	    	for (Buku buku : listBuku) {
+	    		if (buku.getId() == id){
+	    			int stokLama = buku.getStok();
+	    			int stokBaru = stokLama - jumlah;
+	    			buku.setStok(stokBaru);
+	    			
+	    			try {
+	    	        	statement = connection.createStatement();
+	    	        	String sql = "update buku set stok=%d where id=%d";
+	    	    		sql = String.format(sql, buku.getStok(), id);
+	    	        	statement.execute(sql);
+	    	        } catch (Exception e) {
+	    	            e.printStackTrace();
+	    	        }
+	    		}
+	    	}
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
     }
 }

@@ -27,31 +27,10 @@ public class MainApp {
 		printDetailBuku(buku);
 
 		// update stok
-		Transaksi transaksi = new Transaksi();
-		buku = bukuDao.getDetail(2);
-		transaksi.setBuku(buku);
-		transaksi.setJumlah(4);
-
-		int totalHarga = buku.getHarga()*transaksi.getJumlah();
-		transaksi.setHarga(totalHarga);
-		
-		try {
-			connection = DBConnection.getConnection();
-        	statement = connection.createStatement();
-        	String sql = "INSERT INTO transaksi (idBuku, judul, jumlah, harga) VALUE('%d', '%s', '%d', '%d')";
-    		sql = String.format(sql, transaksi.getBuku().getId(), transaksi.getBuku().getJudul(), transaksi.getJumlah(), transaksi.getHarga());
-        	statement.execute(sql);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-		bukuDao.updateStok(transaksi.getBuku().getId(), transaksi.getJumlah());
+		bukuDao.updateStok(2, 4);
 
 		System.out.println("\nSemua Buku");
-		bukuDao = new BukuDaoImpl();
-		for (Buku buku1 : bukuDao.getAllBuku()) {
-			System.out.println(buku1.getId() +  " - " + buku1.getJudul() + " : " + buku1.getStok());
-		}
+		printAllBuku(bukuDao.getAllBuku());
 	}
 	
 	private static void printAllBuku(List<Buku> listBuku) {
