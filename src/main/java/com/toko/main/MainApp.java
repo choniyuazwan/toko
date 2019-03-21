@@ -29,6 +29,7 @@ public class MainApp {
 	        String pilihan = input.readLine().trim();
 	
 	        if (pilihan.equals("0")) {
+	        	System.out.println("Terimakasih");
 	        	System.exit(0);
 	        } else if (pilihan.equals("1")) {
                 getAllBuku();
@@ -43,7 +44,7 @@ public class MainApp {
                 buyBuku();
                 menu();
 	        } else {
-	        	System.out.println("pilihan salah");
+	        	System.out.println("Pilihan salah");
 	        	menu();
 	        }
 	    } catch (Exception e) {
@@ -89,7 +90,11 @@ public class MainApp {
 	    	buku.setHarga(Integer.parseInt(input.readLine()));
 			System.out.print("Stok: ");
 	    	buku.setStok(Integer.parseInt(input.readLine()));
-	    	bukuDao.addBuku(buku);
+	    	if(bukuDao.addBuku(buku)) {
+	    		success();
+	    	} else {
+	    		failed();
+	    	}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -103,7 +108,11 @@ public class MainApp {
 			int id = Integer.parseInt(input.readLine());
 			System.out.print("Jumlah: ");
 			int jumlah = Integer.parseInt(input.readLine());
-			bukuDao.buyBuku(id, jumlah);
+			if(bukuDao.buyBuku(id, jumlah)) {
+				success();
+			} else {
+				failed();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

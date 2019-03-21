@@ -22,8 +22,8 @@ public class BukuDaoImpl implements BukuDao{
 	}
  
 	@Override
-	public void addBuku(Buku buku) {
-		dbUtil.addBuku(buku);	
+	public boolean addBuku(Buku buku) {
+		return dbUtil.addBuku(buku);	
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class BukuDaoImpl implements BukuDao{
 	}
 
 	@Override
-	public void buyBuku(int id, int jumlah) {
-		dbUtil.buyBuku(id, jumlah);
+	public boolean buyBuku(int id, int jumlah) {
+		return dbUtil.buyBuku(id, jumlah);
 	}
 }
