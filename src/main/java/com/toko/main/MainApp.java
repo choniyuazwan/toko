@@ -52,8 +52,12 @@ public class MainApp {
 	}
 
 	static void getAllBuku() {
-		System.out.println("\nSemua Buku");
-		printAllBuku(bukuDao.getAllBuku());		
+		System.out.println("\nSemua Data Buku");
+		if(bukuDao.getAllBuku() != null || !bukuDao.getAllBuku().isEmpty()) {
+			printAllBuku(bukuDao.getAllBuku());
+    	} else {
+    		notFound();
+    	}
 	}
 	
 	static void getDetailBuku( ) {
@@ -61,7 +65,12 @@ public class MainApp {
 			System.out.println("\nDetail Buku");
 			System.out.print("Id: ");
 			buku = bukuDao.getDetailBuku(Integer.parseInt(input.readLine()));
-			printDetailBuku(buku);			
+			
+			if(buku != null) {
+				printDetailBuku(buku);
+	    	} else {
+	    		notFound();
+	    	}	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -69,7 +78,7 @@ public class MainApp {
     
 	static void addBuku() {
 		try {
-			System.out.println("Masukkan Data Buku");
+			System.out.println("Tambah Data Buku");
 			System.out.print("Judul: ");
 			buku.setJudul(input.readLine().trim());
 			System.out.print("Penulis: ");
@@ -89,7 +98,7 @@ public class MainApp {
 	
 	static void buyBuku() {
 		try {
-			System.out.println("\nBeli Barang");
+			System.out.println("\nBeli Buku");
 			System.out.print("Id: ");
 			int id = Integer.parseInt(input.readLine());
 			System.out.print("Jumlah: ");
@@ -98,6 +107,18 @@ public class MainApp {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	static void notFound() {
+		System.out.println("Data tidak ditemukan");
+	}
+	
+	static void success() {
+		System.out.println("Proses berhasil");
+	}
+	
+	static void failed() {
+		System.out.println("Proses gagal");
 	}
 	
 	static void printAllBuku(List<Buku> listBuku) {
